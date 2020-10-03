@@ -14,6 +14,7 @@ public class App {
 			System.out.println("Could not parse arguments!\nMake sure that they are in the correct format.");
 			return;
 		}
-
+		
+		arguments.getClass();
 	}
 }

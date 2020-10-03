@@ -1,0 +1,20 @@
+//PLAN
+
+NETWORK class
+	ACCESS THE SERVER TO FETCH: 
+		*Forbidden Buildings
+		*map.json for date
+		*w3w
+		
+	
+PARSER CLASS:
+	w3w geojson
+	
+ALGORITHM:
+	Gets map.
+	Starting position
+	returns path
+	
+FIle Writer class:
+	outputs.
+	
