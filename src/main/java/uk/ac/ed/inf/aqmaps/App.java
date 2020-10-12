@@ -14,7 +14,22 @@ public class App {
 			System.out.println("Could not parse arguments!\nMake sure that they are in the correct format.");
 			return;
 		}
-		
+
 		arguments.getClass();
+
+		var connector = new Connector("localhost", 80);
+
+		try {
+			var json = connector.dateData(2020, 12, 2);
+			int i=0;
+			for (var obj : json) {
+				System.out.printf("%d ",i++);
+				System.out.println(obj);}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return;
+		}
+
 	}
 }

@@ -18,3 +18,19 @@ ALGORITHM:
 FIle Writer class:
 	outputs.
 	
+	
+	
+	
+	
+	
+Connector:
+	Constructor(port) v
+	Contains a client v
+	
+	Contains a request maker.
+	response parser for 3 things:
+									
+									Air-Data Using date
+									
+	
+	
