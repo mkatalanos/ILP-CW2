@@ -16,9 +16,8 @@ public class App {
 		}
 
 		var connector = new Connector("localhost", arguments.getPort());
-		
-		MapData map = new MapMaker().make();
 
+		var map = new MapMaker(connector, arguments).make();
 
 	}
 }

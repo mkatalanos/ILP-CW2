@@ -54,6 +54,22 @@ public class Connector {
 		return null;
 	}
 
+	public W3W getWord(Sensor s) throws Exception {
+		var words = s.getLocation();
+		String[] args = words.split("\\.");
+		var request = requestCreator(String.format("words/%s/%s/%s/details.json", args[0], args[1], args[2]));
+		var response = client.send(request, BodyHandlers.ofString());
+		if (response.statusCode() == 200) {
+			var body = response.body();
+			var w3w = new Gson().fromJson(body, W3W.class);
+			return w3w;
+		} else {
+			System.out.println("Failed to get position from server");
+			System.exit(1);
+		}
+		return null;
+	}
+
 	public String getHost() {
 		return this.host;
 	}

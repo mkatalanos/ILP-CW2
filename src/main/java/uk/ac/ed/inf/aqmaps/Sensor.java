@@ -20,4 +20,16 @@ public class Sensor {
 		return String.format("location: %s, battery:%.3f, reading:%s", this.location, this.battery, this.reading);
 	}
 
+	public String getLocation() {
+		return this.location;
+	}
+
+	public Point getPosition() {
+		return position;
+	}
+
+	public void setPosition(Point position) {
+		this.position = position;
+	}
+
 }
