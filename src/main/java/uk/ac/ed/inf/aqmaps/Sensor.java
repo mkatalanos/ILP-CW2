@@ -9,11 +9,11 @@ public class Sensor {
 	private double battery;
 	private String reading;
 
-	public Sensor(String location, double battery, double reading) {
-		this.location = location;
-		this.battery = battery;
-		this.reading = String.valueOf(reading);
-	}
+//	public Sensor(String location, double bat, double reading) {
+//		this.location = location;
+//		this.battery = 0;
+//		this.reading = String.valueOf(reading);
+//	}
 
 	@Override
 	public String toString() {
