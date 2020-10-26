@@ -1,6 +1,7 @@
 package uk.ac.ed.inf.aqmaps;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import com.mapbox.geojson.Point;
 
@@ -29,22 +30,27 @@ public class Drone {
 	}
 
 	// TODO COMPLETE HELPER METHODS
-	public ArrayList<Point> findPath(Point a,Point b) {
-		
-		if (straightPath(b)) {
-			
+	public ArrayList<Integer> findPath(Point a, Point b) {
+		var pathAngles = new ArrayList<Integer>();
+
+		var now = new Point2D(a);
+		var target = new Point2D(b);
+
+		while (straightPath(b)) {
+			var angle = Point2D.findAngle(now, target);
+			now.add(0.0003, angle);
+			pathAngles.add(Integer.valueOf(angle));
+			if (Point2D.dist(now, target) <= 0.0002)
+				return pathAngles;
 		}
-		return null;
+		// If this point is reached it means there is no direct path. -->
+		pathAngles.addAll(rayPath(a, b));
+		return pathAngles;
 	}
 
-	private int findAngle(Point p1, Point p2) {
-		var y2 = p2.latitude();
-		var y1 = p1.latitude();
-		var x2 = p2.longitude();
-		var x1 = p1.longitude();
-		double angle = (Math.toDegrees(Math.atan2(y2 - y1, x2 - x1)) + 360) % 360;
-		angle = Math.round(angle / 10f) * 10;
-		return (int) angle;
+	private ArrayList<Integer> rayPath(Point a, Point b) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	private boolean straightPath(Point target) {
@@ -56,5 +62,5 @@ public class Drone {
 		// TODO Auto-generated method stub
 
 	}
-	
+
 }
