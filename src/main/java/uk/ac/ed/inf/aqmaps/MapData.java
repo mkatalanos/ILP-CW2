@@ -12,4 +12,12 @@ public class MapData {
 		this.sensors = sensors;
 	}
 
+	public FeatureCollection getForbidden_areas() {
+		return forbidden_areas;
+	}
+
+	public Sensor[] getSensors() {
+		return sensors;
+	}
+
 }

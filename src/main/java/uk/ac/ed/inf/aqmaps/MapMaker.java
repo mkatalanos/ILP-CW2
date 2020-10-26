@@ -47,7 +47,7 @@ public class MapMaker {
 		}
 	}
 
-	MapData make() {
+	public MapData make() {
 		downloadSensors();
 		updateSensors();
 		downloadBuildings();

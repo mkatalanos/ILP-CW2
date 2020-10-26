@@ -1,12 +1,13 @@
 //PLAN
 
+DONE
 NETWORK class
 	ACCESS THE SERVER TO FETCH: 
 		*Forbidden Buildings
 		*map.json for date
 		*w3w
 		
-	
+DONE
 PARSER CLASS:
 	w3w geojson
 	
@@ -22,7 +23,7 @@ FIle Writer class:
 	
 	
 	
-	
+DONE	
 Connector:
 	Constructor(port) v
 	Contains a client v
