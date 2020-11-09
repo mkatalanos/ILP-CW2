@@ -1,12 +1,13 @@
 package uk.ac.ed.inf.aqmaps;
 
-import com.mapbox.geojson.FeatureCollection;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapMaker {
 
 	private Connector connector;
 	private ArgumentParser arguments;
-	private FeatureCollection forbidden_areas;
+	private List<Obstacle> forbidden_areas;
 	private Sensor[] sensors;
 
 	public MapMaker(Connector connector, ArgumentParser arguments) {
@@ -15,8 +16,12 @@ public class MapMaker {
 	}
 
 	private void downloadBuildings() {
+		this.forbidden_areas = new ArrayList<>();
 		try {
-			this.forbidden_areas = connector.forbiddenAreas();
+			var forbidden_areas_collection = connector.forbiddenAreas().features();
+			for (var feature : forbidden_areas_collection) {
+				this.forbidden_areas.add(Obstacle.fromFeature(feature));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(1);

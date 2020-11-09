@@ -34,4 +34,10 @@ public class Point2D {
 	public static double dist(Point2D p1, Point2D p2) {
 		return Math.sqrt(Math.pow(p2.y - p1.y, 2) + Math.pow(p2.x - p1.x, 2));
 	}
+
+	@Override
+	public String toString() {
+		return String.format("(%f,%f)", x, y);
+	}
+
 }

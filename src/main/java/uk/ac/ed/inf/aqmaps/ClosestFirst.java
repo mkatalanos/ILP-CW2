@@ -38,7 +38,7 @@ public class ClosestFirst {
 	public void run() {
 		int sensorsLeft = 33;
 		var nextSensor = chooseSensor();
-		ArrayList<Point> path = drone.findPath(nextSensor.getPosition());
+		ArrayList<Integer> path = drone.findPath(drone.getStarting_position(), nextSensor.getPosition());
 		while (sensorsLeft > 0 && steps < 150) {
 			drone.move(path.get(0));
 			path.remove(0);
@@ -48,10 +48,11 @@ public class ClosestFirst {
 				sensors.remove(nextSensor);
 				nextSensor = chooseSensor();
 				sensorsLeft--;
-				path = drone.findPath(nextSensor.getPosition());
+				path = drone.findPath(drone.getPosition(),nextSensor.getPosition());
 			}
 		}
-		path = drone.findPath(drone.getStarting_position());
+		//GO BACK
+		path = drone.findPath(drone.getPosition(),drone.getStarting_position());
 		while (steps < 150) {
 			drone.move(path.get(0));
 			path.remove(0);

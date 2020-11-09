@@ -1,17 +1,17 @@
 package uk.ac.ed.inf.aqmaps;
 
 import java.util.ArrayList;
-import java.util.Collection;
-
 import com.mapbox.geojson.Point;
 
 public class Drone {
 	private Point position;
 	private final Point starting_position;
+	private MapData map;
 
-	public Drone(ArgumentParser arguments) {
+	public Drone(ArgumentParser arguments, MapData map) {
 		this.starting_position = arguments.getStartingPos();
 		this.position = starting_position;
+		this.map = map;
 	}
 
 	public double distanceToSensor(Sensor s) {
@@ -54,13 +54,22 @@ public class Drone {
 	}
 
 	private boolean straightPath(Point target) {
-		// TODO Auto-generated method stub
-		return false;
+		var drone2D = new Point2D(this.position);
+		var target2D = new Point2D(target);
+
+		var targetLine = new Line2D(drone2D, target2D);
+		var obstacles = map.getForbidden_areas();
+		for (var obstacle : obstacles) {
+			for (var wall : obstacle.walls)
+				if (Line2D.intersect(targetLine, wall))
+					return false;
+		}
+		return true;
 	}
 
-	public void move(Point point) {
+	public void move(int angle) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 }

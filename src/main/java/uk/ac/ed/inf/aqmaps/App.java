@@ -18,9 +18,11 @@ public class App {
 		var connector = new Connector("localhost", arguments.getPort());
 
 		var map = new MapMaker(connector, arguments).make();
-		
-		var drone=new Drone(arguments);
-		
-		var algorithm = new ClosestFirst(drone,map);
+
+//		var drone=new Drone(arguments,map);
+//		
+//		var algorithm = new ClosestFirst(drone,map);
+
+		map.getForbidden_areas();
 	}
 }
