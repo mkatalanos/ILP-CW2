@@ -1,5 +1,13 @@
 package uk.ac.ed.inf.aqmaps;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.mapbox.geojson.Feature;
+import com.mapbox.geojson.FeatureCollection;
+import com.mapbox.geojson.LineString;
+import com.mapbox.geojson.Point;
+
 public class App {
 	public static void main(String[] args) {
 
@@ -19,10 +27,20 @@ public class App {
 
 		var map = new MapMaker(connector, arguments).make();
 
-//		var drone=new Drone(arguments,map);
-//		
-//		var algorithm = new ClosestFirst(drone,map);
+		var drone = new Drone(arguments, map);
 
-		map.getForbidden_areas();
+		var algorithm = new ClosestFirst(drone, map);
+
+		algorithm.run();
+
+		List<Feature> features = new ArrayList<>();
+
+		features.add(Feature.fromGeometry(LineString.fromLngLats(drone.poslog)));
+		var sensors = map.getSensors();
+		for (Sensor s : sensors) {
+			features.add(Feature.fromGeometry(s.getPosition()));
+		}
+		System.out.println(FeatureCollection.fromFeatures(features).toJson());
+//		map.getForbidden_areas();
 	}
 }

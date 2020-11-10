@@ -2,6 +2,7 @@ package uk.ac.ed.inf.aqmaps;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import com.mapbox.geojson.Point;
 
@@ -16,7 +17,7 @@ public class ClosestFirst {
 	public ClosestFirst(Drone d, MapData map) {
 		this.drone = d;
 		this.map = map;
-		this.sensors = Arrays.asList(map.getSensors());
+		this.sensors = new LinkedList<Sensor>(Arrays.asList(map.getSensors()));
 		this.steps = 0;
 
 		path = new ArrayList<>();
@@ -44,16 +45,19 @@ public class ClosestFirst {
 			path.remove(0);
 			steps++;
 			if (drone.distanceToSensor(nextSensor) < 0.0002) {
-//				drone.readSensor(nextSensor);
+
+				drone.readSensor(nextSensor);
 				sensors.remove(nextSensor);
-				nextSensor = chooseSensor();
 				sensorsLeft--;
-				path = drone.findPath(drone.getPosition(),nextSensor.getPosition());
+				if (sensorsLeft == 0)
+					break;
+				nextSensor = chooseSensor();
+				path = drone.findPath(drone.getPosition(), nextSensor.getPosition());
 			}
 		}
-		//GO BACK
-		path = drone.findPath(drone.getPosition(),drone.getStarting_position());
-		while (steps < 150) {
+		// GO BACK
+		path = drone.findPath(drone.getPosition(), drone.getStarting_position());
+		while (steps < 150 && path.size() > 0) {
 			drone.move(path.get(0));
 			path.remove(0);
 			steps++;

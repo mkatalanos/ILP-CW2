@@ -1,17 +1,23 @@
 package uk.ac.ed.inf.aqmaps;
 
 import java.util.ArrayList;
+import java.util.List;
+
 import com.mapbox.geojson.Point;
 
 public class Drone {
 	private Point position;
 	private final Point starting_position;
 	private MapData map;
+	List<Point> poslog;
 
 	public Drone(ArgumentParser arguments, MapData map) {
 		this.starting_position = arguments.getStartingPos();
 		this.position = starting_position;
 		this.map = map;
+
+		poslog = new ArrayList<>();
+		poslog.add(starting_position);
 	}
 
 	public double distanceToSensor(Sensor s) {
@@ -68,8 +74,16 @@ public class Drone {
 	}
 
 	public void move(int angle) {
+		var pos2D = new Point2D(this.getPosition());
+		pos2D.add(0.0003, angle);
+		this.position = Point.fromLngLat(pos2D.x, pos2D.y);
+		poslog.add(position);
+//		System.out.println(pos2D);
+	}
+
+	public void readSensor(Sensor nextSensor) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
