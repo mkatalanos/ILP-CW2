@@ -3,6 +3,8 @@ package uk.ac.ed.inf.aqmaps;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jgrapht.graph.SimpleWeightedGraph;
+
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.LineString;
@@ -32,15 +34,27 @@ public class App {
 		var algorithm = new ClosestFirst(drone, map);
 
 		algorithm.run();
-
-		List<Feature> features = new ArrayList<>();
-
-		features.add(Feature.fromGeometry(LineString.fromLngLats(drone.poslog)));
-		var sensors = map.getSensors();
-		for (Sensor s : sensors) {
-			features.add(Feature.fromGeometry(s.getPosition()));
-		}
-		System.out.println(FeatureCollection.fromFeatures(features).toJson());
+//
+//		List<Feature> features = new ArrayList<>();
+//
+//		features.add(Feature.fromGeometry(LineString.fromLngLats(drone.poslog)));
+//		var sensors = map.getSensors();
+//		for (Sensor s : sensors) {
+//			features.add(Feature.fromGeometry(s.getPosition()));
+//		}
+//		System.out.println(FeatureCollection.fromFeatures(features).toJson());
 //		map.getForbidden_areas();
+
+		var a = new Point2D(0, 0);
+		var b = new Point2D(52, 100);
+		var graph = drone.createGraph(map.getForbidden_areas(), a, b);
+//		graph.edgeSet().forEach(edge -> {
+////			System.out.println(String.format("%s", edge));
+//			System.out.printf("%s,weight: %e,length: %e\n", edge, graph.getEdgeWeight(edge), edge.getLength());
+//		});
+
+//		var vv = drone.astar(graph, a, b);
+//		System.out.println(vv);
+
 	}
 }

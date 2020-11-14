@@ -4,9 +4,12 @@ public class Line2D {
 	final Point2D a;
 	final Point2D b;
 
+	final double length;
+
 	public Line2D(Point2D a, Point2D b) {
 		this.a = a;
 		this.b = b;
+		this.length = Point2D.dist(a, b);
 	}
 
 	public static boolean intersect(Line2D lineA, Line2D lineB) {
@@ -36,8 +39,23 @@ public class Line2D {
 		}
 	}
 
+	public static boolean touching(Line2D lineA, Line2D lineB) {
+		var a1 = lineA.a;
+		var b1 = lineA.b;
+
+		var a2 = lineB.a;
+		var b2 = lineB.b;
+
+		return (a1 == a2 || a1 == b2 || b1 == a2 || b1 == b2);
+	}
+
+	public double getLength() {
+		return length;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("Point a: %s, Point b: %s", a, b);
 	}
+
 }

@@ -1,7 +1,16 @@
 package uk.ac.ed.inf.aqmaps;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+
+import org.jgrapht.Graph;
+import org.jgrapht.alg.drawing.model.Points;
+import org.jgrapht.alg.interfaces.AStarAdmissibleHeuristic;
+import org.jgrapht.alg.shortestpath.AStarShortestPath;
+import org.jgrapht.graph.DefaultUndirectedWeightedGraph;
+import org.jgrapht.graph.DefaultWeightedEdge;
+import org.jgrapht.graph.SimpleWeightedGraph;
 
 import com.mapbox.geojson.Point;
 
@@ -69,16 +78,83 @@ public class Drone {
 					collisionObstacles.add(obstacle);
 					continue obstacleLoop;
 				}
-		var graph = createGraph(collisionObstacles);
-		var path = astar(graph, a, b);
+
+		var graph = createGraph(collisionObstacles, start, target);
+		var path = shortestPath(graph, start, target);
+		System.out.println();
 		var points = new ArrayList<Integer>();
-		var previous=a;
-		for (var point : path) {
-			points.addAll(findPath(previous, point))));
-			previous=point;
+		for (var edge : path) {
+			points.addAll(findPath(edge.a.toPoint(), edge.b.toPoint()));
 		}
 
 		return points;
+	}
+
+	public List<Line2D> shortestPath(Graph<Point2D, Line2D> graph, Point2D source, Point2D target) {
+		var astar = new AStarShortestPath<Point2D, Line2D>(graph, new AStarAdmissibleHeuristic<Point2D>() {
+			@Override
+			public double getCostEstimate(Point2D sourceVertex, Point2D targetVertex) {
+				return Point2D.dist(sourceVertex, targetVertex);
+			}
+		});
+//		System.out.println(graph.outgoingEdgesOf(source).size());
+		var path = astar.getPath(source, target);
+//		System.out.println(path);
+//		var vertices = path.getVertexList();
+		return path.getEdgeList();
+	}
+
+	public Graph<Point2D, Line2D> createGraph(List<Obstacle> obstacles, Point2D a, Point2D b) {
+		var graph = new SimpleWeightedGraph<Point2D, Line2D>(Line2D.class);
+
+		var vertices = new HashSet<Point2D>();
+		// Add all corners
+		for (var obstacle : obstacles)
+			for (var corner : obstacle.points)
+				vertices.add(corner);
+
+		// Add origin and target
+		vertices.add(a);
+		vertices.add(b);
+
+		// Add vertices to the graph
+		for (var vertex : vertices) {
+			graph.addVertex(vertex);
+		}
+
+		// AROUND OBSTACLE SHAPE EDGES
+		var shapeEdges = new ArrayList<Line2D>();
+		for (var obstacle : obstacles) {
+			var corners = obstacle.points;
+			for (int i = 0; i < corners.size() - 1; i++) {
+				shapeEdges.add(new Line2D(corners.get(i), corners.get(i + 1)));
+			}
+		}
+
+		var otherEdges = new ArrayList<Line2D>();
+		var verticesArr = vertices.toArray();
+
+		for (int i = 0; i < verticesArr.length - 1; i++) {
+			next: for (int j = i + 1; j < verticesArr.length; j++) {
+				var testLine = new Line2D((Point2D) verticesArr[i], (Point2D) verticesArr[j]);
+				for (var edge : shapeEdges)
+					if (Line2D.intersect(testLine, edge) && !Line2D.touching(testLine, edge))
+						continue next;
+				otherEdges.add(testLine);
+			}
+		}
+
+		// Add obstacle edges
+		for (var edge : shapeEdges)
+			graph.addEdge(edge.a, edge.b, edge);
+		// Add connection edges
+		for (var edge : otherEdges)
+			graph.addEdge(edge.a, edge.b, edge);
+		// Set weights to lengths
+		for (var edge : graph.edgeSet())
+			graph.setEdgeWeight(edge, edge.getLength());
+
+		return graph;
 	}
 
 	private boolean straightPath(Point target) {
