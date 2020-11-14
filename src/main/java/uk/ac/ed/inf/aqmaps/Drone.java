@@ -55,8 +55,30 @@ public class Drone {
 	}
 
 	private ArrayList<Integer> rayPath(Point a, Point b) {
-		// TODO Auto-generated method stub
-		return null;
+		var start = new Point2D(a);
+		var target = new Point2D(b);
+		var ray = new Line2D(start, target);
+
+		var obstacles = map.getForbidden_areas();
+
+		// Find obstacles in front of the target
+		var collisionObstacles = new ArrayList<Obstacle>();
+		obstacleLoop: for (var obstacle : obstacles)
+			for (var wall : obstacle.walls)
+				if (Line2D.intersect(ray, wall)) {
+					collisionObstacles.add(obstacle);
+					continue obstacleLoop;
+				}
+		var graph = createGraph(collisionObstacles);
+		var path = astar(graph, a, b);
+		var points = new ArrayList<Integer>();
+		var previous=a;
+		for (var point : path) {
+			points.addAll(findPath(previous, point))));
+			previous=point;
+		}
+
+		return points;
 	}
 
 	private boolean straightPath(Point target) {

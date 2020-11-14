@@ -1,8 +1,8 @@
 package uk.ac.ed.inf.aqmaps;
 
 public class Line2D {
-	Point2D a;
-	Point2D b;
+	final Point2D a;
+	final Point2D b;
 
 	public Line2D(Point2D a, Point2D b) {
 		this.a = a;
