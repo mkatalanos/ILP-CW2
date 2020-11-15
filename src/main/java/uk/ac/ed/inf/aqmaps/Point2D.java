@@ -35,6 +35,20 @@ public class Point2D {
 		return Math.sqrt(Math.pow(p2.y - p1.y, 2) + Math.pow(p2.x - p1.x, 2));
 	}
 
+	public boolean inObstacle(Obstacle obstacle) {
+		int counter = 0;
+		var ray = new Line2D(this, new Point2D(Double.MAX_VALUE, Double.MAX_VALUE));
+		for (var wall : obstacle.walls) {
+			if (Line2D.intersect(ray, wall))
+				counter++;
+		}
+		for (var corner : obstacle.points)
+			if (corner.x == this.x && corner.y == this.y)
+				return true;
+
+		return (counter % 2 != 0);
+	}
+
 	@Override
 	public String toString() {
 		return String.format("(%f,%f)", x, y);

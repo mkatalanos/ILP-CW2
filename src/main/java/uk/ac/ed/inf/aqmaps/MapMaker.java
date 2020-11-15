@@ -9,6 +9,7 @@ public class MapMaker {
 	private ArgumentParser arguments;
 	private List<Obstacle> forbidden_areas;
 	private Sensor[] sensors;
+	private Obstacle walls;
 
 	public MapMaker(Connector connector, ArgumentParser arguments) {
 		this.connector = connector;
@@ -52,11 +53,32 @@ public class MapMaker {
 		}
 	}
 
+	public void buildWalls() {
+		var a = new Point2D(Settings.corners[0]);
+		var c = new Point2D(Settings.corners[1]);
+		var b = new Point2D(c.x, a.y);
+		var d = new Point2D(a.x, c.y);
+
+		var points = new ArrayList<Point2D>();
+		points.add(a);
+		points.add(b);
+		points.add(c);
+		points.add(d);
+		points.add(a);
+		try {
+			this.walls = new Obstacle(points);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
 	public MapData make() {
 		downloadSensors();
 		updateSensors();
 		downloadBuildings();
+		buildWalls();
 
-		return new MapData(forbidden_areas, sensors);
+		return new MapData(forbidden_areas, sensors, walls);
 	}
 }

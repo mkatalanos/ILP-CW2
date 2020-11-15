@@ -22,7 +22,8 @@ public class Obstacle {
 		else
 			throw new Exception("Object has no walls");
 	}
-
+	
+	
 	public static Obstacle fromFeature(Feature feature) throws Exception {
 		var polygon = (Polygon) feature.geometry();
 		var pointList = polygon.coordinates().get(0);

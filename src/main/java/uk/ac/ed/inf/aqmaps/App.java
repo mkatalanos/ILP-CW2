@@ -33,28 +33,40 @@ public class App {
 
 		var algorithm = new ClosestFirst(drone, map);
 
-		algorithm.run();
-//
-//		List<Feature> features = new ArrayList<>();
+//		algorithm.run();
+
+		List<Feature> features = new ArrayList<>();
 //
 //		features.add(Feature.fromGeometry(LineString.fromLngLats(drone.poslog)));
-//		var sensors = map.getSensors();
-//		for (Sensor s : sensors) {
-//			features.add(Feature.fromGeometry(s.getPosition()));
-//		}
+		var sensors = map.getSensors();
+		for (Sensor s : sensors) {
+			features.add(Feature.fromGeometry(s.getPosition()));
+		}
+
+		try {
+			var areas = connector.forbiddenAreas();
+			for (var area : areas.features()) {
+				features.add(area);
+			}
+		} catch (Exception e) {
+		}
 //		System.out.println(FeatureCollection.fromFeatures(features).toJson());
-//		map.getForbidden_areas();
 
-		var a = new Point2D(0, 0);
-		var b = new Point2D(52, 100);
-		var graph = drone.createGraph(map.getForbidden_areas(), a, b);
-//		graph.edgeSet().forEach(edge -> {
-////			System.out.println(String.format("%s", edge));
-//			System.out.printf("%s,weight: %e,length: %e\n", edge, graph.getEdgeWeight(edge), edge.getLength());
-//		});
+		drone.rayPath(new Point2D(-3.1865724040985173, 55.944938036504546).toPoint(),
+				new Point2D(-3.188319, 55.945518).toPoint()).forEach(point -> {
+					var f = Feature.fromGeometry(point);
+					f.addStringProperty("marker-color", "#0000ff");
 
-//		var vv = drone.astar(graph, a, b);
-//		System.out.println(vv);
-
+					features.add(f);
+				});
+		var f = Feature.fromGeometry(new Point2D(-3.1865724040985173, 55.944938036504546).toPoint());
+		f.addStringProperty("marker-color", "#ff0000");
+		f.addStringProperty("type", "START");
+		features.add(f);
+		var f2 = Feature.fromGeometry(new Point2D(-3.188319, 55.945518).toPoint());
+		f2.addStringProperty("marker-color", "#ff0000");
+		f2.addStringProperty("type", "END");
+		features.add(f2);
+		System.out.println(FeatureCollection.fromFeatures(features).toJson());
 	}
 }
