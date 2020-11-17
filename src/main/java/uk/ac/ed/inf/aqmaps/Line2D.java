@@ -49,6 +49,13 @@ public class Line2D {
 		return (a1 == a2 || a1 == b2 || b1 == a2 || b1 == b2);
 	}
 
+	public boolean inObstacle(Obstacle o) {
+		var mx = (this.a.x + this.b.x) / 2;
+		var my = (this.a.y + this.b.y) / 2;
+		var midpoint = new Point2D(mx, my);
+		return midpoint.inObstacle(o);
+	}
+
 	public double getLength() {
 		return length;
 	}

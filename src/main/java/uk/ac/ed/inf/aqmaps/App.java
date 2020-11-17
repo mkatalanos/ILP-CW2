@@ -33,11 +33,11 @@ public class App {
 
 		var algorithm = new ClosestFirst(drone, map);
 
-//		algorithm.run();
+		algorithm.run();
 
 		List<Feature> features = new ArrayList<>();
 //
-//		features.add(Feature.fromGeometry(LineString.fromLngLats(drone.poslog)));
+		features.add(Feature.fromGeometry(LineString.fromLngLats(drone.poslog)));
 		var sensors = map.getSensors();
 		for (Sensor s : sensors) {
 			features.add(Feature.fromGeometry(s.getPosition()));
@@ -52,21 +52,22 @@ public class App {
 		}
 //		System.out.println(FeatureCollection.fromFeatures(features).toJson());
 
-		drone.rayPath(new Point2D(-3.1865724040985173, 55.944938036504546).toPoint(),
-				new Point2D(-3.188319, 55.945518).toPoint()).forEach(point -> {
-					var f = Feature.fromGeometry(point);
-					f.addStringProperty("marker-color", "#0000ff");
+//		drone.rayPath(new Point2D(-3.1865724040985173, 55.944938036504546).toPoint(),
+//				new Point2D(-3.188319, 55.945518).toPoint()).forEach(point -> {
+//					var f = Feature.fromGeometry(point);
+//					f.addStringProperty("marker-color", "#0000ff");
+//
+//					features.add(f);
+//				});
+//		var f = Feature.fromGeometry(new Point2D(-3.186572,55.944938).toPoint());
+//		f.addStringProperty("marker-color", "#ff0000");
+//		f.addStringProperty("type", "START");
+//		features.add(f);
+//		var f2 = Feature.fromGeometry(new Point2D(-3.187113,55.945553).toPoint());
+//		f2.addStringProperty("marker-color", "#ff0000");
+//		f2.addStringProperty("type", "END");
+//		features.add(f2);
 
-					features.add(f);
-				});
-		var f = Feature.fromGeometry(new Point2D(-3.1865724040985173, 55.944938036504546).toPoint());
-		f.addStringProperty("marker-color", "#ff0000");
-		f.addStringProperty("type", "START");
-		features.add(f);
-		var f2 = Feature.fromGeometry(new Point2D(-3.188319, 55.945518).toPoint());
-		f2.addStringProperty("marker-color", "#ff0000");
-		f2.addStringProperty("type", "END");
-		features.add(f2);
 		System.out.println(FeatureCollection.fromFeatures(features).toJson());
 	}
 }

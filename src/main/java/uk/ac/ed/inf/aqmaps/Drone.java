@@ -49,7 +49,7 @@ public class Drone {
 		var now = new Point2D(a);
 		var target = new Point2D(b);
 
-		while (straightPath(b)) {
+		while (straightPath(a, b)) {
 			var angle = Point2D.findAngle(now, target);
 			while (!validMove(angle)) {
 				System.out.println("INVALID");
@@ -61,17 +61,18 @@ public class Drone {
 				return pathAngles;
 		}
 		// If this point is reached it means there is no direct path. -->
+		System.out.printf("RayPath :%s, %s\n", new Point2D(a), new Point2D(b));
 		var targets = rayPath(a, b);
-//		System.out.println("We are here");
-
-//		for (int i = 0; i < targets.size() - 1; i++) {
-//			pathAngles.addAll(findPath(targets.get(i), targets.get(i + 1)));
-//			System.out.println(i);
-//		}
+		System.out.println("We are here");
+		var from = a;
+		for (var point : targets) {
+			pathAngles.addAll(findPath(from, point.toPoint()));
+			from = point.toPoint();
+		}
 		return pathAngles;
 	}
 
-	public List<Point> rayPath(Point a, Point b) {
+	public List<Point2D> rayPath(Point a, Point b) {
 		System.out.println(a.toString() + b.toString());
 		var start = new Point2D(a);
 		var target = new Point2D(b);
@@ -90,11 +91,7 @@ public class Drone {
 
 		var graph = createGraph(collisionObstacles, start, target);
 		var path = shortestPath(graph, start, target);
-
-		var pointList = new ArrayList<Point>();
-		for (var point : path)
-			pointList.add(point.toPoint());
-		return pointList;
+		return path;
 	}
 
 	public List<Point2D> shortestPath(Graph<Point2D, Line2D> graph, Point2D source, Point2D target) {
@@ -104,13 +101,16 @@ public class Drone {
 				return Point2D.dist(sourceVertex, targetVertex);
 			}
 		});
-		var dijkstra = new DijkstraShortestPath<Point2D, Line2D>(graph);
 
-//		System.out.println(graph.outgoingEdgesOf(source).size());
-		var path = dijkstra.getPath(source, target);
-//		System.out.println(path);
-//		var vertices = path.getVertexList();
-		return path.getVertexList();
+		var path = astar.getPath(source, target);
+		if (path == null) {
+			var pathn = new ArrayList<Point2D>();
+			pathn.add(target);
+			return pathn;
+		}
+		var pointList = path.getVertexList();
+		pointList.remove(0);
+		return pointList;
 	}
 
 	public Graph<Point2D, Line2D> createGraph(List<Obstacle> obstacles, Point2D a, Point2D b) {
@@ -146,9 +146,13 @@ public class Drone {
 		for (int i = 0; i < verticesArr.length - 1; i++) {
 			next: for (int j = i + 1; j < verticesArr.length; j++) {
 				var testLine = new Line2D((Point2D) verticesArr[i], (Point2D) verticesArr[j]);
-				for (var edge : shapeEdges)
+				for (var edge : shapeEdges) {
 					if (Line2D.intersect(testLine, edge) && !Line2D.touching(testLine, edge))
 						continue next;
+					for (var obstacle : obstacles)
+						if (testLine.inObstacle(obstacle))
+							continue next;
+				}
 				otherEdges.add(testLine);
 			}
 		}
@@ -166,15 +170,15 @@ public class Drone {
 		return graph;
 	}
 
-	private boolean straightPath(Point target) {
-		var drone2D = new Point2D(this.position);
+	private boolean straightPath(Point source, Point target) {
+		var drone2D = new Point2D(source);
 		var target2D = new Point2D(target);
 
 		var targetLine = new Line2D(drone2D, target2D);
 		var obstacles = map.getForbidden_areas();
 		for (var obstacle : obstacles) {
 			for (var wall : obstacle.walls)
-				if (Line2D.intersect(targetLine, wall))
+				if (Line2D.intersect(targetLine, wall) && !Line2D.touching(targetLine, wall))
 					return false;
 		}
 		return true;
