@@ -43,31 +43,37 @@ public class Drone {
 	}
 
 	// TODO COMPLETE HELPER METHODS
+	
 	public ArrayList<Integer> findPath(Point a, Point b) {
 		var pathAngles = new ArrayList<Integer>();
 
 		var now = new Point2D(a);
 		var target = new Point2D(b);
-
-		while (straightPath(a, b)) {
-			var angle = Point2D.findAngle(now, target);
-			while (!validMove(angle)) {
-				System.out.println("INVALID");
-				angle += 10;
+		if (straightPath(a, b)) {
+			while (Point2D.dist(now, target) > 0.0002) {
+				var angle = Point2D.findAngle(now, target);
+				while (!validMove(angle)) {
+					System.out.println("INVALID");
+					angle += 10;
+				}
+				now.add(0.0003, angle);
+				pathAngles.add(Integer.valueOf(angle));
 			}
-			now.add(0.0003, angle);
-			pathAngles.add(Integer.valueOf(angle));
-			if (Point2D.dist(now, target) <= 0.0002)
-				return pathAngles;
+			return pathAngles;
 		}
-		// If this point is reached it means there is no direct path. -->
-		System.out.printf("RayPath :%s, %s\n", new Point2D(a), new Point2D(b));
-		var targets = rayPath(a, b);
-		System.out.println("We are here");
-		var from = a;
-		for (var point : targets) {
-			pathAngles.addAll(findPath(from, point.toPoint()));
-			from = point.toPoint();
+		var goals = rayPath(a, b);
+		for (var point : goals) {
+			var pointAngles = new ArrayList<Integer>();
+			while (Point2D.dist(now, point) > 0.0001) {
+				var angle = Point2D.findAngle(now, point);
+				while (!validMove(angle)) {
+					System.out.println("INVALID");
+					angle += 10;
+				}
+				now.add(0.0003, angle);
+				pointAngles.add(Integer.valueOf(angle));
+			}
+			pathAngles.addAll(pointAngles);
 		}
 		return pathAngles;
 	}
