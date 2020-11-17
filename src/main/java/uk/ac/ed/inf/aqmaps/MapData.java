@@ -12,7 +12,7 @@ public class MapData {
 		this.forbidden_areas = forbidden_areas;
 		this.sensors = sensors;
 		this.walls = walls;
-		System.out.println(walls);
+//		System.out.println(walls);
 	}
 
 	public List<Obstacle> getForbidden_areas() {
@@ -20,7 +20,7 @@ public class MapData {
 	}
 
 	public Obstacle getWalls() {
-		System.out.println(this.walls);
+//		System.out.println(this.walls);
 		return walls;
 	}
 

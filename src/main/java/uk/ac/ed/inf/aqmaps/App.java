@@ -3,12 +3,9 @@ package uk.ac.ed.inf.aqmaps;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jgrapht.graph.SimpleWeightedGraph;
-
 import com.mapbox.geojson.Feature;
 import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.LineString;
-import com.mapbox.geojson.Point;
 
 public class App {
 	public static void main(String[] args) {
@@ -29,7 +26,7 @@ public class App {
 
 		var map = new MapMaker(connector, arguments).make();
 
-		var drone = new Drone(arguments, map);
+		var drone = new Drone(arguments);
 
 		var algorithm = new ClosestFirst(drone, map);
 
