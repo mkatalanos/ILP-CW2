@@ -32,5 +32,4 @@ public class Sensor {
 		this.position = position;
 	}
 
-		
 }

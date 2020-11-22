@@ -49,6 +49,13 @@ public class Point2D {
 		return (counter % 2 != 0);
 	}
 
+	public boolean inWalls() {
+//		-3.192473, 55.946233
+//		-3.184319, 55.942617
+		return (this.x > -3.192473 && this.x < -3.184319 && this.y < 55.946233 && this.y > 55.942617);
+
+	}
+
 	@Override
 	public String toString() {
 		return String.format("(%f,%f)", x, y);
