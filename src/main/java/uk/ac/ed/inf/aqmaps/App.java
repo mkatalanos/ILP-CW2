@@ -29,8 +29,8 @@ public class App {
 
 		var drone = new Drone(arguments);
 
-		Algorithm algorithm = new TwoOptTour(drone, map, arguments);
-//		Algorithm algorithm = new ClosestFirst(drone, map);
+//		Algorithm algorithm = new TwoOptTour(drone, map, arguments);
+		Algorithm algorithm = new ClosestFirst(drone, map);
 
 		algorithm.run();
 

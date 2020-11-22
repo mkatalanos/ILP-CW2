@@ -56,6 +56,11 @@ public class Point2D {
 
 	}
 
+	public Point2D clone() {
+		Point2D out = new Point2D(this.x, this.y);
+		return out;
+	}
+
 	@Override
 	public String toString() {
 		return String.format("(%f,%f)", x, y);

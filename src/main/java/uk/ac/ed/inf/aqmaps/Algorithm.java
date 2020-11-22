@@ -27,15 +27,15 @@ public abstract class Algorithm {
 		path = new ArrayList<>();
 	}
 
-	int angleAdjuster(int angle, int lastAngle) {
+	int angleAdjuster(int angle, int lastAngle, Point2D position) {
 //		System.out.println("Angle Adjuster");
-		if (validMove(angle)) {
+		if (validMove(angle, position)) {
 //			System.out.println("False Positive");
 			return angle;
 		}
-		var validPos = validMove(angle + 10);
-		var validNeg = validMove(angle - 10);
-		var validLast = validMove(lastAngle);
+		var validPos = validMove(angle + 10, position);
+		var validNeg = validMove(angle - 10, position);
+		var validLast = validMove(lastAngle, position);
 
 		if (validLast)
 			return lastAngle;
@@ -43,9 +43,9 @@ public abstract class Algorithm {
 			return angle - 10;
 		if (validPos)
 			return angle + 10;
-		if (validMove(angle + 180))
+		if (validMove(angle + 180, position))
 			return angle + 180;
-		while (!validMove(angle)) {
+		while (!validMove(angle, position)) {
 			angle += 10;
 			if (angle > 540)
 				return angle;
@@ -123,10 +123,9 @@ public abstract class Algorithm {
 		if (straightPath(a, b)) {
 			while (Point2D.dist(now, target) > 0.00015) {
 				var angle = Point2D.findAngle(now, target);
-				if (!validMove(angle))
-					;
-//					System.out.println("Tough cookies");
-				angle = angleAdjuster(angle, lastAngle);
+				if (!validMove(angle, now))
+					System.out.println("Tough cookies");
+				angle = angleAdjuster(angle, lastAngle, now);
 				lastAngle = angle;
 				now.add(0.0003, angle);
 				pathAngles.add(Integer.valueOf(angle));
@@ -139,10 +138,10 @@ public abstract class Algorithm {
 
 			while (Point2D.dist(now, point) > 0.00015) {
 				var angle = Point2D.findAngle(now, point);
-				if (!validMove(angle))
-					;
-//					System.out.println("Tough cookies Rays");
-				angle = angleAdjuster(angle, lastAngle);
+				if (!validMove(angle, now))
+
+					System.out.println("Tough cookies Rays");
+				angle = angleAdjuster(angle, lastAngle, now);
 				lastAngle = angle;
 				now.add(0.0003, angle);
 				pointAngles.add(Integer.valueOf(angle));
@@ -178,22 +177,24 @@ public abstract class Algorithm {
 	public void run() {
 		int sensorsLeft = 33;
 		var nextSensor = chooseSensor();
+		var pos = new Point2D(drone.getPosition());
 		System.out.println(new Point2D(nextSensor.getPosition()));
 		ArrayList<Integer> path = findPath(drone.getStarting_position(), nextSensor.getPosition());
 		while (sensorsLeft > 0 && steps < 150) {
+			pos = new Point2D(drone.getPosition());
 			if (path.size() == 0) {
 				var angle = Point2D.findAngle(new Point2D(drone.getPosition()), new Point2D(nextSensor.getPosition()))
 						- 10;
-				if (!validMove(angle))
-					if (validMove(angle + 20))
+				if (!validMove(angle, pos))
+					if (validMove(angle + 20, pos))
 						angle += 20;
-				if (!validMove(angle))
+				if (!validMove(angle, pos))
 					System.out.println("KONTAA!");
 				drone.move(angle);
 
 			} else {
 				var angle = path.get(0);
-				if (!validMove(angle)) {
+				if (!validMove(angle, pos)) {
 					System.out.println("EXECUTING INVALID MOVE");
 					path = findPath(drone.getPosition(), nextSensor.getPosition());
 					continue;
@@ -202,8 +203,8 @@ public abstract class Algorithm {
 				path.remove(0);
 			}
 			steps++;
+			// READ SENSOR IF CLOSE
 			if (drone.distanceToSensor(nextSensor) < 0.0002) {
-
 				drone.readSensor(nextSensor);
 				sensorsLeft--;
 				if (sensorsLeft == 0)
@@ -211,6 +212,8 @@ public abstract class Algorithm {
 				nextSensor = chooseSensor();
 				path = findPath(drone.getPosition(), nextSensor.getPosition());
 			}
+//			if (drone.distanceToSensor(nextSensor) > 0.0004)
+//				path = findPath(drone.getPosition(), nextSensor.getPosition());
 
 		}
 		// GO BACK
@@ -278,9 +281,9 @@ public abstract class Algorithm {
 //		return true;
 //	}
 
-	private boolean validMove(int angle) {
-		var oldPos = new Point2D(drone.getPosition());
-		var nextPos = new Point2D(drone.getPosition());
+	private boolean validMove(int angle, Point2D position) {
+		var oldPos = position.clone();
+		var nextPos = position.clone();
 		nextPos.add(0.0003, angle);
 		var testLine = new Line2D(oldPos, nextPos);
 

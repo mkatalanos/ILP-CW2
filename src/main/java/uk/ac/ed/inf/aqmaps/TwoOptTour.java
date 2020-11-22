@@ -55,7 +55,7 @@ public class TwoOptTour extends Algorithm {
 	}
 
 	List<Point2D> twoOptTour(Graph<Point2D, Line2D> graph) {
-		var twoOpt = new TwoOptHeuristicTSP<Point2D, Line2D>(100, new Random(seed));
+		var twoOpt = new TwoOptHeuristicTSP<Point2D, Line2D>(1, new Random(seed));
 		var tour = twoOpt.getTour(graph);
 		var path = tour.getVertexList();
 		path.remove(path.size() - 1);
@@ -66,7 +66,8 @@ public class TwoOptTour extends Algorithm {
 		var sensorStream = vertices.stream().map(point -> sensorFromPoint2D(point)).filter(sensor -> sensor != null);
 		this.sensorOrder = sensorStream.collect(Collectors.toList());
 		var min = Collections.min(sensorOrder, c);
-		Collections.rotate(sensorOrder, sensorOrder.indexOf(min));
+		Collections.rotate(sensorOrder, -sensorOrder.indexOf(min));
+
 		System.out.println(sensorOrder.size());
 	}
 
@@ -91,7 +92,7 @@ public class TwoOptTour extends Algorithm {
 	@Override
 	public Sensor chooseSensor() {
 //		if (Point2D.dist(new Point2D(sensorOrder.get(0).getPosition()), new Point2D(drone.getPosition())) > 0.0001)
-			return sensorOrder.remove(0);
+		return sensorOrder.remove(0);
 //		else
 //			return sensorOrder.remove(1);
 	}
