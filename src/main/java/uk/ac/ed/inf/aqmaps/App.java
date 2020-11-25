@@ -34,6 +34,8 @@ public class App {
 
 		algorithm.run();
 
+//		var log = drone.generateLog();
+
 		List<Feature> features = new ArrayList<>();
 
 		features.add(Feature.fromGeometry(LineString.fromLngLats(drone.poslog)));
@@ -71,16 +73,6 @@ public class App {
 		wallF.addStringProperty("stroke", "#0000ff");
 		features.add(wallF);
 
-//		var f2 = Feature.fromGeometry(new Point2D(-3.187113,55.945553).toPoint());
-//		f2.addStringProperty("marker-color", "#ff0000");
-//		f2.addStringProperty("type", "END");
-//		features.add(f2);
-
-//		var p1=new Point2D(-3.1870901,
-//		         55.9455493);
-//		var p2=new Point2D(-3.1867901,
-//         55.9455493);
-//		var line=new Line2D()
 		System.out.println(FeatureCollection.fromFeatures(features).toJson());
 		System.out.println(algorithm.steps);
 	}

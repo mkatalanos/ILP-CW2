@@ -8,7 +8,7 @@ import com.mapbox.geojson.Point;
 public class Drone {
 	private Point position;
 	private final Point starting_position;
-	List<Point> poslog;
+	private final List<Point> poslog;
 
 	public Drone(ArgumentParser arguments) {
 		this.starting_position = arguments.getStartingPos();
@@ -40,8 +40,7 @@ public class Drone {
 		poslog.add(position);
 	}
 
-	public void readSensor(Sensor nextSensor) {
-		// TODO Auto-generated method stub
+	public void readSensor(Sensor s) {
 
 	}
 

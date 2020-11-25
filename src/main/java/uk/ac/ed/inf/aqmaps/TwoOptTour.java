@@ -55,7 +55,7 @@ public class TwoOptTour extends Algorithm {
 	}
 
 	List<Point2D> twoOptTour(Graph<Point2D, Line2D> graph) {
-		var twoOpt = new TwoOptHeuristicTSP<Point2D, Line2D>(1, new Random(seed));
+		var twoOpt = new TwoOptHeuristicTSP<Point2D, Line2D>(100, new Random(seed));
 		var tour = twoOpt.getTour(graph);
 		var path = tour.getVertexList();
 		path.remove(path.size() - 1);
