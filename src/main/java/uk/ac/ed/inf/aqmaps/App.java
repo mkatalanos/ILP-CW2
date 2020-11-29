@@ -75,5 +75,6 @@ public class App {
 
 		System.out.println(FeatureCollection.fromFeatures(features).toJson());
 		System.out.println(algorithm.steps);
+		System.out.println(drone.log());
 	}
 }

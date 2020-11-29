@@ -8,12 +8,14 @@ import com.mapbox.geojson.Point;
 public class Drone {
 	private Point position;
 	private final Point starting_position;
-	private final List<Point> poslog;
+	private final Logger logger;
+	public final List<Point> poslog;
 
 	public Drone(ArgumentParser arguments) {
 		this.starting_position = arguments.getStartingPos();
 		this.position = starting_position;
-
+		this.logger = new Logger();
+		logger.logPos(getStarting_position());
 		poslog = new ArrayList<>();
 		poslog.add(starting_position);
 	}
@@ -38,10 +40,16 @@ public class Drone {
 		pos2D.add(0.0003, angle);
 		this.position = Point.fromLngLat(pos2D.x, pos2D.y);
 		poslog.add(position);
+		logger.logAngle(angle);
+		logger.logPos(position);
 	}
 
 	public void readSensor(Sensor s) {
-
+		var reading = new SensorReading(s);
+		logger.logReading(reading);
 	}
 
+	public String log() {
+		return logger.toCollection().toJson();
+	}
 }

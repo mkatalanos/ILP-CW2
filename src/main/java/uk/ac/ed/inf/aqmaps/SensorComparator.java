@@ -3,7 +3,7 @@ package uk.ac.ed.inf.aqmaps;
 import java.util.Comparator;
 
 public class SensorComparator implements Comparator<Sensor> {
-	private Drone drone;
+	private final Drone drone;
 
 	public SensorComparator(Drone drone) {
 		this.drone = drone;

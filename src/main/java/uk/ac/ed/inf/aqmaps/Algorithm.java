@@ -121,7 +121,7 @@ public abstract class Algorithm {
 		var now = new Point2D(a);
 		var target = new Point2D(b);
 		if (straightPath(a, b)) {
-			while (Point2D.dist(now, target) > 0.00015) {
+			while (Point2D.dist(now, target) > 0.0002) {
 				var angle = Point2D.findAngle(now, target);
 				if (!validMove(angle, now))
 					System.out.println("Tough cookies");
@@ -136,7 +136,7 @@ public abstract class Algorithm {
 		for (var point : goals) {
 			var pointAngles = new ArrayList<Integer>();
 
-			while (Point2D.dist(now, point) > 0.00015) {
+			while (Point2D.dist(now, point) > 0.0002) {
 				var angle = Point2D.findAngle(now, point);
 				if (!validMove(angle, now))
 
