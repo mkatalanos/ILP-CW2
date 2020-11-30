@@ -4,7 +4,7 @@ import com.mapbox.geojson.Feature;
 
 public class SensorReading {
 
-	private Sensor sensor;
+	protected Sensor sensor;
 	private double parsedReading;
 	private boolean needsBattery;
 
@@ -13,6 +13,10 @@ public class SensorReading {
 		var battery = s.getBattery();
 		needsBattery = battery < 10;
 		parsedReading = !needsBattery ? parseReading(s.getReading()) : -1.0;
+	}
+
+	public Sensor getSensor() {
+		return sensor;
 	}
 
 	private Double parseReading(String reading) {
@@ -35,6 +39,7 @@ public class SensorReading {
 		feature.addStringProperty("marker-color", color);
 		var symbol = symbolFromData();
 		feature.addStringProperty("marker-symbol", symbol);
+		feature.addStringProperty("location", sensor.getLocation());
 		return feature;
 	}
 

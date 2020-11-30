@@ -37,8 +37,8 @@ public class App {
 //		var log = drone.generateLog();
 
 		List<Feature> features = new ArrayList<>();
-
-		features.add(Feature.fromGeometry(LineString.fromLngLats(drone.poslog)));
+		drone.getLogger().addNonRead(map.getSensors());
+//		features.add(Feature.fromGeometry(LineString.fromLngLats(drone.poslog)));
 		var sensors = map.getSensors();
 		for (Sensor s : sensors) {
 			features.add(Feature.fromGeometry(s.getPosition()));
@@ -76,5 +76,8 @@ public class App {
 		System.out.println(FeatureCollection.fromFeatures(features).toJson());
 		System.out.println(algorithm.steps);
 		System.out.println(drone.log());
+		var lines = drone.getLogger().createLines();
+		for (var line : lines)
+			System.out.print(line);
 	}
 }

@@ -31,26 +31,36 @@ public abstract class Algorithm {
 //		System.out.println("Angle Adjuster");
 		if (validMove(angle, position)) {
 //			System.out.println("False Positive");
-			return angle;
+			return angleRemapper(angle);
 		}
 		var validPos = validMove(angle + 10, position);
 		var validNeg = validMove(angle - 10, position);
 		var validLast = validMove(lastAngle, position);
 
 		if (validLast)
-			return lastAngle;
+			return angleRemapper(lastAngle);
 		if (validNeg)
-			return angle - 10;
+			return angleRemapper(angle - 10);
 		if (validPos)
-			return angle + 10;
+			return angleRemapper(angle + 10);
 		if (validMove(angle + 180, position))
-			return angle + 180;
+			return angleRemapper(angle + 180);
 		while (!validMove(angle, position)) {
 			angle += 10;
 			if (angle > 540)
-				return angle;
+				return angleRemapper(angle);
 		}
 		System.out.println("Out of control");
+		return angleRemapper(angle);
+	}
+
+	int angleRemapper(int angle) {
+		while (!(angle >= 0 && angle <= 350)) {
+			if (angle < 0)
+				angle += 360;
+			else if (angle > 350)
+				angle -= 360;
+		}
 		return angle;
 	}
 
@@ -212,9 +222,6 @@ public abstract class Algorithm {
 				nextSensor = chooseSensor();
 				path = findPath(drone.getPosition(), nextSensor.getPosition());
 			}
-//			if (drone.distanceToSensor(nextSensor) > 0.0004)
-//				path = findPath(drone.getPosition(), nextSensor.getPosition());
-
 		}
 		// GO BACK
 		path = findPath(drone.getPosition(), drone.getStarting_position());
@@ -223,6 +230,8 @@ public abstract class Algorithm {
 			path.remove(0);
 			steps++;
 		}
+		if (steps == 150)
+			drone.getLogger().addNonRead(sensors);
 
 	}
 

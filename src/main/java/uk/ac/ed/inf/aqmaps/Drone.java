@@ -27,12 +27,20 @@ public class Drone {
 		return distance;
 	}
 
+	public Logger getLogger() {
+		return logger;
+	}
+
 	public Point getPosition() {
 		return position;
 	}
 
 	public Point getStarting_position() {
 		return starting_position;
+	}
+
+	public String log() {
+		return logger.toString();
 	}
 
 	public void move(int angle) {
@@ -47,9 +55,5 @@ public class Drone {
 	public void readSensor(Sensor s) {
 		var reading = new SensorReading(s);
 		logger.logReading(reading);
-	}
-
-	public String log() {
-		return logger.toCollection().toJson();
 	}
 }
