@@ -131,7 +131,8 @@ public abstract class Algorithm {
 		var now = new Point2D(a);
 		var target = new Point2D(b);
 		if (straightPath(a, b)) {
-			while (Point2D.dist(now, target) > 0.0002) {
+			var safety_counter = 0;
+			while (Point2D.dist(now, target) > 0.0002 && safety_counter++ <= 30) {
 				var angle = Point2D.findAngle(now, target);
 				if (!validMove(angle, now))
 					System.out.println("Tough cookies");
@@ -139,14 +140,15 @@ public abstract class Algorithm {
 				lastAngle = angle;
 				now.add(0.0003, angle);
 				pathAngles.add(Integer.valueOf(angle));
+
 			}
 			return pathAngles;
 		}
 		var goals = rayPath(a, b);
 		for (var point : goals) {
 			var pointAngles = new ArrayList<Integer>();
-
-			while (Point2D.dist(now, point) > 0.0002) {
+			var safety_counter = 0;
+			while (Point2D.dist(now, point) > 0.0002 && safety_counter++ <= 30) {
 				var angle = Point2D.findAngle(now, point);
 				if (!validMove(angle, now))
 

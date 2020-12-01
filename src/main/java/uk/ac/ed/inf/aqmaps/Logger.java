@@ -51,7 +51,7 @@ public class Logger {
 		readingMoves.add(angles.size() - 1);
 	}
 
-	private FeatureCollection toCollection() {
+	public FeatureCollection toCollection() {
 		FeatureCollection fc;
 		var sensorFeatureList = readings.stream().map(SensorReading::toFeature).collect(Collectors.toList());
 		var path = Feature.fromGeometry(LineString.fromLngLats(pointsVisited));

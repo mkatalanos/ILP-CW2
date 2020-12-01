@@ -1,5 +1,6 @@
 package uk.ac.ed.inf.aqmaps;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,16 +30,27 @@ public class App {
 
 		var drone = new Drone(arguments);
 
-//		Algorithm algorithm = new TwoOptTour(drone, map, arguments);
-		Algorithm algorithm = new ClosestFirst(drone, map);
+		Algorithm algorithm = new TwoOptTour(drone, map, arguments);
+//		Algorithm algorithm = new ClosestFirst(drone, map);
 
 		algorithm.run();
 
-//		var log = drone.generateLog();
+		var log = drone.getLogger();
+
+		Writer w = new Writer(log, arguments);
+		try {
+			w.writeAngles();
+			w.writeJson();
+		} catch (IOException e) {
+			System.out.println("Could not write to files!"); // In case the files could not be written output the file
+																// to
+																// stdout
+			return;
+		}
 
 		List<Feature> features = new ArrayList<>();
 		drone.getLogger().addNonRead(map.getSensors());
-//		features.add(Feature.fromGeometry(LineString.fromLngLats(drone.poslog)));
+		features.add(Feature.fromGeometry(LineString.fromLngLats(drone.poslog)));
 		var sensors = map.getSensors();
 		for (Sensor s : sensors) {
 			features.add(Feature.fromGeometry(s.getPosition()));
@@ -75,9 +87,5 @@ public class App {
 
 		System.out.println(FeatureCollection.fromFeatures(features).toJson());
 		System.out.println(algorithm.steps);
-		System.out.println(drone.log());
-		var lines = drone.getLogger().createLines();
-		for (var line : lines)
-			System.out.print(line);
 	}
 }
