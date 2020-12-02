@@ -101,4 +101,5 @@ public class Drone {
 		var reading = new SensorReading(sensor);
 		logger.logReading(reading);
 	}
+
 }

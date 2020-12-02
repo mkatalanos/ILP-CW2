@@ -30,12 +30,20 @@ public class App {
 
 		var drone = new Drone(arguments);
 
-		Algorithm algorithm = new TwoOptTour(drone, map, arguments);
-//		Algorithm algorithm = new ClosestFirst(drone, map);
+		var drone_bak = new Drone(arguments);
+		var map_bak = new MapMaker(connector, arguments).make();
 
-		algorithm.run();
-
+		Algorithm approach = new TwoOptTour(drone, map, arguments);
+		if (approach.run() == 1) {
+			drone = drone_bak;
+			map = map_bak;
+			System.out.println("Algorithm swap");
+			approach = new ClosestFirst(drone, map);
+			approach.run();
+		}
 		var log = drone.getLogger();
+
+		log.addNonRead(map.getSensors());
 
 		Writer w = new Writer(log, arguments);
 		try {
@@ -52,10 +60,10 @@ public class App {
 		List<Feature> features = new ArrayList<>();
 		drone.getLogger().addNonRead(map.getSensors());
 		features.add(Feature.fromGeometry(LineString.fromLngLats(drone.poslog)));
-		var sensors = map.getSensors();
-		for (Sensor s : sensors) {
-			features.add(Feature.fromGeometry(s.getPosition()));
-		}
+//		var sensors = map.getSensors();
+//		for (Sensor s : sensors) {
+//			features.add(Feature.fromGeometry(s.getPosition()));
+//		}
 		// Show Buildings
 		try {
 			var areas = connector.forbiddenAreas();
@@ -87,6 +95,7 @@ public class App {
 		features.add(wallF);
 
 		System.out.println(FeatureCollection.fromFeatures(features).toJson());
-		System.out.println(algorithm.steps);
+		System.out.println(drone.getLogger().createLines().size());
+
 	}
 }

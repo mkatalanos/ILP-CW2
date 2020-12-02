@@ -53,7 +53,7 @@ public class Connector {
 			var sensors = new Gson().fromJson(body, Sensor[].class);
 			return sensors;
 		} else
-			System.out.println("Sad");
+			System.out.println("Failed to get data");
 		return null;
 
 	}
