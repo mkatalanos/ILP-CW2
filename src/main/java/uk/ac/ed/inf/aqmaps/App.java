@@ -45,9 +45,10 @@ public class App {
 			System.out.println("Could not write to files!"); // In case the files could not be written output the file
 																// to
 																// stdout
-			return;
+			System.exit(1);
 		}
 
+		// Debug
 		List<Feature> features = new ArrayList<>();
 		drone.getLogger().addNonRead(map.getSensors());
 		features.add(Feature.fromGeometry(LineString.fromLngLats(drone.poslog)));

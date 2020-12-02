@@ -3,19 +3,36 @@ package uk.ac.ed.inf.aqmaps;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class is used to prepare and build a MapData object which will hold
+ * everything needed for the drone to move around the map.
+ * 
+ * @author marios
+ *
+ */
 public class MapMaker {
 
-	private Connector connector;
-	private ArgumentParser arguments;
+	private final Connector connector;
+	private final ArgumentParser arguments;
 	private List<Obstacle> forbidden_areas;
 	private Sensor[] sensors;
-	private Obstacle walls;
 
+	/**
+	 * Constructor of the class.
+	 * 
+	 * @param connector It takes a connector object from which the other objects
+	 *                  will be downloaded from.
+	 * @param arguments Standard input arguments.
+	 */
 	public MapMaker(Connector connector, ArgumentParser arguments) {
 		this.connector = connector;
 		this.arguments = arguments;
 	}
 
+	/**
+	 * Using the connector it downloads and creates obstacle objects for each
+	 * forbidden area.
+	 */
 	private void downloadBuildings() {
 		this.forbidden_areas = new ArrayList<>();
 		try {
@@ -29,6 +46,9 @@ public class MapMaker {
 		}
 	}
 
+	/**
+	 * Using the connector it downloads and creates the sensor list for the day.
+	 */
 	private void downloadSensors() {
 		var day = arguments.getDate()[0];
 		var month = arguments.getDate()[1];
@@ -41,6 +61,9 @@ public class MapMaker {
 		}
 	}
 
+	/**
+	 * Updates every sensor to add its w3w translation.
+	 */
 	private void updateSensors() {
 		try {
 			for (Sensor s : sensors) {
@@ -53,32 +76,16 @@ public class MapMaker {
 		}
 	}
 
-	public void buildWalls() {
-		var a = new Point2D(Settings.corners[0]);
-		var c = new Point2D(Settings.corners[1]);
-		var b = new Point2D(c.x, a.y);
-		var d = new Point2D(a.x, c.y);
-
-		var points = new ArrayList<Point2D>();
-		points.add(a);
-		points.add(b);
-		points.add(c);
-		points.add(d);
-		points.add(a);
-		try {
-			this.walls = new Obstacle(points);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
+	/**
+	 * Creates a MapData object based on the downloaded objects.
+	 * 
+	 * @return A new MapData object.
+	 */
 	public MapData make() {
 		downloadSensors();
 		updateSensors();
 		downloadBuildings();
-		buildWalls();
 
-		return new MapData(forbidden_areas, sensors, walls);
+		return new MapData(forbidden_areas, sensors);
 	}
 }
