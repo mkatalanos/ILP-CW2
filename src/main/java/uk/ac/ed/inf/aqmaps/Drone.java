@@ -1,8 +1,5 @@
 package uk.ac.ed.inf.aqmaps;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.mapbox.geojson.Point;
 
 /**
@@ -16,9 +13,6 @@ public class Drone {
 	private final Point starting_position; // Starting position
 	private final Logger logger; // Used to log every move and readings
 
-	// TODO AFTER EVERYTHING IS DONE REMOVE.
-	public final List<Point> poslog;
-
 	/**
 	 * Public constructor for the drone.
 	 * 
@@ -29,10 +23,6 @@ public class Drone {
 		this.position = starting_position;
 		this.logger = new Logger();
 		logger.logPos(getStarting_position());
-
-		// TODO REMOVE
-		poslog = new ArrayList<>();
-		poslog.add(starting_position);
 	}
 
 	/**
@@ -87,7 +77,6 @@ public class Drone {
 		var pos2D = new Point2D(this.getPosition());
 		pos2D.add(0.0003, angle);
 		this.position = Point.fromLngLat(pos2D.x, pos2D.y);
-		poslog.add(position);
 		logger.logAngle(angle);
 		logger.logPos(position);
 	}

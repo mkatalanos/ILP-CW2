@@ -36,7 +36,7 @@ public class Writer {
 		var day = date[0];
 		var month = date[1];
 		var year = date[2];
-		var path = String.format("flightpath-%d-%d-%d.txt", day, month, year);
+		var path = String.format("flightpath-%02d-%02d-%d.txt", day, month, year);
 
 		var loglines = log.createLines();
 
@@ -57,7 +57,7 @@ public class Writer {
 		var month = date[1];
 		var year = date[2];
 
-		var path = String.format("readings-%d-%d-%d.geojson", day, month, year);
+		var path = String.format("readings-%02d-%02d-%d.geojson", day, month, year);
 
 		var collection = log.toCollection();
 

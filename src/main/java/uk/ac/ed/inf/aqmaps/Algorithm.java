@@ -210,7 +210,7 @@ public abstract class Algorithm {
 		for (var point : goals) { // For each goal
 			var pointAngles = new ArrayList<Integer>();
 			var safety_counter = 0; // Used to exit early or in case of an infinite loop
-			while (Point2D.dist(now, point) > 0.0002 && safety_counter++ <= 5) {
+			while (Point2D.dist(now, point) > 0.0002 && safety_counter++ <= 10) {
 				var angle = Point2D.findAngle(now, point);
 
 				// Debug message

@@ -63,7 +63,7 @@ public class ClosestFirst extends Algorithm {
 	 * that it gets chosen last.
 	 */
 	@Override
-	public void ignoreSensor(Sensor s) {
+	protected void ignoreSensor(Sensor s) {
 		availableSensors.add(s);
 	}
 

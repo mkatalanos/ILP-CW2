@@ -31,6 +31,7 @@ public class NonReadSensor extends SensorReading {
 		var color = "#aaaaaa";
 		feature.addStringProperty("rgb-string", color);
 		feature.addStringProperty("marker-color", color);
+		feature.addStringProperty("location", sensor.getLocation());
 		return feature;
 	}
 }

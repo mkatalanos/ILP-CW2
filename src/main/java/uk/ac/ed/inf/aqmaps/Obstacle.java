@@ -19,12 +19,12 @@ public class Obstacle {
 	public final List<Line2D> walls;
 
 	/**
-	 * Public constructor
+	 * Private constructor
 	 * 
 	 * @param points A list of Point2D points which form the obstacle.
 	 * @throws Exception If the point list has a size of less than or equal to 1.
 	 */
-	public Obstacle(List<Point2D> points) throws Exception {
+	private Obstacle(List<Point2D> points) throws Exception {
 		this.points = points;
 		walls = new ArrayList<Line2D>();
 		if (points.size() > 1)

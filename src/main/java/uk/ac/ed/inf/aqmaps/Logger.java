@@ -38,7 +38,7 @@ public class Logger {
 	 * 
 	 * @param sensors Sensors to be tested if they were read.
 	 */
-	void addNonRead(Sensor[] sensors) {
+	public void addNonRead(Sensor[] sensors) {
 		var nonVisited = new ArrayList<Sensor>();
 		outer: for (var s : sensors) {
 			for (var reading : readings) {
@@ -78,7 +78,7 @@ public class Logger {
 	 * 
 	 * @param angle
 	 */
-	void logAngle(int angle) {
+	public void logAngle(int angle) {
 		angles.add(angle);
 	}
 
@@ -87,7 +87,7 @@ public class Logger {
 	 * 
 	 * @param p
 	 */
-	void logPos(Point p) {
+	public void logPos(Point p) {
 		pointsVisited.add(p);
 	}
 
@@ -97,7 +97,7 @@ public class Logger {
 	 * 
 	 * @param reading
 	 */
-	void logReading(SensorReading reading) {
+	public void logReading(SensorReading reading) {
 		readings.add(reading);
 		readingMoves.add(angles.size() - 1);
 	}
