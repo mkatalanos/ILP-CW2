@@ -109,7 +109,9 @@ public class Logger {
 	 */
 	public FeatureCollection toCollection() {
 		FeatureCollection fc;
+		//Convert the sensors to features
 		var sensorFeatureList = readings.stream().map(SensorReading::toFeature).collect(Collectors.toList());
+		//Create the path's linestring.
 		var path = Feature.fromGeometry(LineString.fromLngLats(pointsVisited));
 		var features = new ArrayList<Feature>();
 		if (angles.size() > 0)
